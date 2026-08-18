@@ -8,7 +8,12 @@ app.use(express.json());
 
 // 1. Mock License / Verification Route
 app.post('/api/verify', (req, res) => {
-    res.json({ ok: true, valid: true, status: 'active' });
+    res.json({ 
+        success: true, 
+        valid: true, 
+        status: 'active',
+        license: 'Lifetime'
+    });
 });
 
 // 2. Proxy Route for API Requests
