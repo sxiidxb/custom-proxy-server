@@ -51,7 +51,11 @@ app.post('/api/approve', async (req, res) => {
         res.status(500).json({ error: 'Plan approval failed' });
     }
 });
-
+// Catch-all to log any unhandled routes so we can see what the extension is requesting
+app.use((req, res) => {
+    console.log(`404 Not Found: ${req.method} ${req.url}`);
+    res.status(404).json({ error: `Route not found: ${req.url}` });
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
