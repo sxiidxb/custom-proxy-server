@@ -34,19 +34,25 @@ app.post(['/api/proxy', '/proxy'], async (req, res) => {
     }
 });
 
-// 3. Download Project Routes (handles all variations)
+// 3. Download Project Routes (including the new exact path)
 const handleDownload = (req, res) => {
     res.json({ success: true, message: 'Project download initiated successfully' });
 };
-app.post(['/api/download', '/download', '/download-zip', '/api/v1/download', '/api/v1/download-zip'], handleDownload);
-app.get(['/api/download', '/download', '/download-zip', '/api/v1/download', '/api/v1/download-zip'], handleDownload);
+const downloadPaths = [
+    '/api/download', '/download', '/download-zip', 
+    '/api/v1/download', '/api/v1/download-zip', 
+    '/api/v1/lovable/download-zip'
+];
+app.post(downloadPaths, handleDownload);
+app.get(downloadPaths, handleDownload);
 
-// 4. Approve Plan Routes (handles all variations)
+// 4. Approve Plan Routes
 const handleApprove = (req, res) => {
     res.json({ success: true, message: 'Plan approved successfully' });
 };
-app.post(['/api/approve', '/approve', '/api/v1/approve'], handleApprove);
-app.get(['/api/approve', '/approve', '/api/v1/approve'], handleApprove);
+const approvePaths = ['/api/approve', '/approve', '/api/v1/approve', '/api/v1/lovable/approve'];
+app.post(approvePaths, handleApprove);
+app.get(approvePaths, handleApprove);
 
 // Catch-all to log any other unhandled routes
 app.use((req, res) => {
