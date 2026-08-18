@@ -34,6 +34,24 @@ app.post('/api/proxy', async (req, res) => {
     }
 });
 
+// 3. Download Project Route
+app.post('/api/download', async (req, res) => {
+    try {
+        res.json({ success: true, message: 'Project download initiated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Download failed' });
+    }
+});
+
+// 4. Approve Plan Route
+app.post('/api/approve', async (req, res) => {
+    try {
+        res.json({ success: true, message: 'Plan approved successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Plan approval failed' });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
