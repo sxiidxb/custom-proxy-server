@@ -34,10 +34,30 @@ app.post(['/api/proxy', '/proxy'], async (req, res) => {
     }
 });
 
-// 3. Download Project Routes (including the new exact path)
-const handleDownload = (req, res) => {
-    res.json({ success: true, message: 'Project download initiated successfully' });
+// 3. Real Project Download Proxy Route
+const handleDownload = async (req, res) => {
+    try {
+        // Extract project ID from URL if present, or fallback to body/query
+        const targetUrl = `https://api.lovable.dev${req.originalUrl.replace('/api/v1/lovable', '')}`;
+        
+        const response = await axios({
+            method: req.method,
+            url: targetUrl,
+            data: req.body,
+            headers: {
+                'Authorization': `Bearer ${process.env.LOVABLE_API_KEY}`
+            },
+            responseType: 'stream'
+        });
+
+        res.setHeader('Content-Type', response.headers['content-type'] || 'application/zip');
+        res.setHeader('Content-Disposition', response.headers['content-disposition'] || 'attachment; filename="project.zip"');
+        response.data.pipe(res);
+    } catch (error) {
+        res.status(error.response?.status || 500).json({ error: 'Download proxy failed', details: error.message });
+    }
 };
+
 const downloadPaths = [
     '/api/download', '/download', '/download-zip', 
     '/api/v1/download', '/api/v1/download-zip', 
